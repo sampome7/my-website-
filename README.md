@@ -1,1 +1,127 @@
-# my-website-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INNER PIPE | 自己制御のための感情可視化ツール</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    function toggleForm() {
+      const form = document.getElementById("diagnosticForm");
+      if (form.classList.contains("hidden")) {
+        form.classList.remove("hidden");
+        form.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
+    function showResult() {
+      let score = 0;
+      let yesAnswers = [];
+      for (let i = 1; i <= 10; i++) {
+        const val = document.querySelector(`input[name=q${i}]:checked`);
+        if (val && val.value === "yes") {
+          score++;
+          yesAnswers.push(i);
+        }
+      }
+      const resultText = document.getElementById("resultText");
+      const adviceText = document.getElementById("adviceText");
+
+      if (yesAnswers.includes(1) && yesAnswers.includes(4) && yesAnswers.includes(5)) {
+        resultText.innerText = "あなたは『高圧応答型パイプ』：期待と感情が高まりやすく、抑圧後に爆発しやすい傾向です。";
+        adviceText.innerText = "“期待に応えすぎる”自分に気づいたら、一度深呼吸して“いま本当にしたいこと”を確認しましょう。感情の定期排出を意識して。";
+      } else if (yesAnswers.includes(2) && yesAnswers.includes(3)) {
+        resultText.innerText = "あなたは『ねじれ反応型パイプ』：他者との誤解が多く、感情の方向が外に向きがちな傾向です。";
+        adviceText.innerText = "“伝わってない”と感じたときほど、自分の伝え方やタイミングを振り返ってみましょう。反応より“関係性”を見る視点がカギです。";
+      } else if (score >= 7) {
+        resultText.innerText = "あなたは『超高圧パイプ型』：承認エネルギー過剰タイプです。丁寧な放出ルートが必要！";
+        adviceText.innerText = "“自分の期待値”を見直して、感情を出す場所や相手を選びましょう。少しずつ自己承認の回路を作ることで、エネルギーを有効に使えるようになります。";
+      } else if (score >= 4) {
+        resultText.innerText = "あなたは『ねじれパイプ型』：感情と行動のズレありタイプです。流れの調整を意識してみよう。";
+        adviceText.innerText = "感情と実際の言動の間に“ワンクッション”置いて、自分軸で動くことが整流化の第一歩です。";
+      } else {
+        resultText.innerText = "あなたは『バランスパイプ型』：比較的安定していますが、さらなる自己理解でよりスムーズに！";
+        adviceText.innerText = "日々の感情や反応を言語化し、振り返る習慣をつけましょう。";
+      }
+      document.getElementById("resultBox").classList.remove("hidden");
+    }
+
+    function saveEmotionLog() {
+      const emotion = document.getElementById("emotionInput").value;
+      const log = document.getElementById("emotionLog");
+      const time = new Date().toLocaleString();
+      const entry = document.createElement("li");
+      entry.className = "border-b py-1";
+      entry.textContent = `${time}：${emotion}`;
+      log.prepend(entry);
+      document.getElementById("emotionInput").value = "";
+    }
+  </script>
+</head>
+<body class="bg-white text-gray-800 font-sans">
+  <section class="text-center py-20 bg-gradient-to-r from-indigo-200 to-blue-100">
+    <h1 class="text-4xl font-bold mb-4">感情と行動の“つまり”を診断しよう</h1>
+    <p class="mb-6 text-lg">感情がスムーズに流れないのは、あなたの“パイプ”のせいかも？</p>
+    <button onclick="toggleForm()" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition">無料診断からはじめる</button>
+  </section>
+
+  <section id="diagnosticForm" class="p-10 max-w-3xl mx-auto hidden">
+    <h2 class="text-2xl font-bold mb-4">あなたの“心のパイプ”診断</h2>
+    <form onsubmit="event.preventDefault(); showResult();" class="space-y-4">
+      <p>1. 小さな失敗でも引きずりがちだ</p>
+      <label><input type="radio" name="q1" value="yes" /> はい</label>
+      <label><input type="radio" name="q1" value="no" /> いいえ</label>
+      <p>2. 人の目がとても気になる</p>
+      <label><input type="radio" name="q2" value="yes" /> はい</label>
+      <label><input type="radio" name="q2" value="no" /> いいえ</label>
+      <p>3. 思ったことがうまく言えないと感じる</p>
+      <label><input type="radio" name="q3" value="yes" /> はい</label>
+      <label><input type="radio" name="q3" value="no" /> いいえ</label>
+      <p>4. 感情が表に出やすい</p>
+      <label><input type="radio" name="q4" value="yes" /> はい</label>
+      <label><input type="radio" name="q4" value="no" /> いいえ</label>
+      <p>5. 自分を認めてもらいたい気持ちが強い</p>
+      <label><input type="radio" name="q5" value="yes" /> はい</label>
+      <label><input type="radio" name="q5" value="no" /> いいえ</label>
+      <p>6. 嫌なことがあると他人にきつくあたってしまう</p>
+      <label><input type="radio" name="q6" value="yes" /> はい</label>
+      <label><input type="radio" name="q6" value="no" /> いいえ</label>
+      <p>7. 頼られると断れない</p>
+      <label><input type="radio" name="q7" value="yes" /> はい</label>
+      <label><input type="radio" name="q7" value="no" /> いいえ</label>
+      <p>8. 一度気にすると止まらなくなる</p>
+      <label><input type="radio" name="q8" value="yes" /> はい</label>
+      <label><input type="radio" name="q8" value="no" /> いいえ</label>
+      <p>9. つい空気を読みすぎる</p>
+      <label><input type="radio" name="q9" value="yes" /> はい</label>
+      <label><input type="radio" name="q9" value="no" /> いいえ</label>
+      <p>10. 気を張ってばかりで疲れる</p>
+      <label><input type="radio" name="q10" value="yes" /> はい</label>
+      <label><input type="radio" name="q10" value="no" /> いいえ</label>
+
+      <button type="submit" class="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">診断結果を表示</button>
+    </form>
+
+    <div id="resultBox" class="mt-6 p-4 bg-gray-100 rounded hidden">
+      <h3 class="text-xl font-bold mb-2">診断結果</h3>
+      <p id="resultText" class="mb-2 font-semibold"></p>
+      <p id="adviceText" class="text-sm mb-4"></p>
+      <div id="formulaAdvice" class="text-sm text-indigo-800 bg-indigo-100 p-3 rounded">
+        <strong>行動修正アドバイス：</strong><br>
+        自分にとって「期待しすぎていたこと」や「思っていたよりできていたこと」を見直すことで、<br>
+        心のバランスを保ちやすくなります。<br>
+        ・過剰な期待はほどほどに<br>
+        ・現実にできていることを丁寧に認めて<br>
+        ・小さな前進を評価する習慣を意識しましょう
+      </div>
+    </div>
+
+    <div class="mt-8">
+      <h4 class="font-bold mb-2">🌿 感情のログを記録しよう</h4>
+      <textarea id="emotionInput" rows="2" class="w-full border p-2 mb-2" placeholder="今日の気分や気づきを記録"></textarea>
+      <button onclick="saveEmotionLog()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">感情を保存</button>
+      <ul id="emotionLog" class="mt-4 text-sm"></ul>
+    </div>
+  </section>
+</body>
+</html>
